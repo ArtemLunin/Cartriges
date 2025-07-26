@@ -14,3 +14,6 @@ sail artisan make:resource Place
 sail artisan make:resource PlaceCollection
 sail artisan make:resource Cartridge
 sail artisan make:resource CartridgeCollection# Cartriges
+
+## Вынесим валидацию в Form Request:
+sail artisan make:request UpdateCartridgeRequest

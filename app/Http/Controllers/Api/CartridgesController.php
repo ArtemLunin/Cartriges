@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Cartridge;
 use App\Http\Resources\Cartridge as CartridgeResource;
 use App\Http\Resources\CartridgeCollection;
+use App\Http\Requests\UpdateCartridgeRequest;
 
 class CartridgesController extends Controller
 {
@@ -74,44 +75,54 @@ class CartridgesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    // public function update(Request $request, string $id)
+    public function update(UpdateCartridgeRequest $request, Cartridge $cartridge)
     {
-        $cartridge = Cartridge::find($id);
-        if(!$cartridge) {
-            return response()->json([
-                "status" => false,
-                "message" => "Cartridge Not Found"
-            ])->setStatusCode(404, "Cartridge Not Found");
-        }
-
-        $cartridge->model = $request->model;
-        $cartridge->barcode = $request->barcode;
-        $cartridge->comment = $request->comment;
-        $cartridge->working = $request->working;
-        $cartridge->save();
-        return $cartridge;
-
+        // $validated = $request->validate([
+        //     'model' => 'required|string|max:50',
+        //     'barcode' => 'string|max:10',
+        //     'comment'   => 'nullable|string',
+        //     'working' => 'nullable|integer|min:0',
+        //     'place_id' => 'required|exists:places,id',
+        // ]);
+        // $cartridge->update($validated);
+        $cartridge->update($request->validated());
+        return new CartridgeResource($cartridge);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Cartridge $cartridge)
     {
-        $cartridge = Cartridge::find($id);
+        // $cartridge = Cartridge::find($id);
 
-        if(!$cartridge) {
-            return response()->json([
-                "status" => false,
-                "message" => "Cartridge Not Found"
-            ])->setStatusCode(404, "Cartridge Not Found");
-        }
+        // if(!$cartridge) {
+        //     return response()->json([
+        //         "status" => false,
+        //         "message" => "Cartridge Not Found"
+        //     ])->setStatusCode(404, "Cartridge Not Found");
+        // }
+
+        // $cartridge->delete();
+
+        // return response()->json([
+        //     "status" => true,
+        //     "message" => "Cartridge is deleted"
+        // ])->setStatusCode(200, "Cartridge is deleted");
+
 
         $cartridge->delete();
+        return response()->json(null, 204);
+    }
 
-        return response()->json([
-            "status" => true,
-            "message" => "Cartridge is deleted"
-        ])->setStatusCode(200, "Cartridge is deleted");
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|min:3',
+        ]);
+        $cartridges = Cartridge::where('barcode', 'like', $request->query('query') . '%')->get();
+
+        return CartridgeResource::collection($cartridges);
     }
 }

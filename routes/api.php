@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\CartridgesController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::get('cartridges/search', [CartridgesController::class, 'search'])->name('cartridges.search');
 
 Route::apiResource('printers', PrintersController::class);
 Route::apiResource('places', PlacesController::class);
