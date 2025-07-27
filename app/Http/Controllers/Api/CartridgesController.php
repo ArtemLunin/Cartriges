@@ -8,6 +8,8 @@ use App\Models\Cartridge;
 use App\Http\Resources\Cartridge as CartridgeResource;
 use App\Http\Resources\CartridgeCollection;
 use App\Http\Requests\UpdateCartridgeRequest;
+use App\Http\Requests\SearchCartridgeRequest;
+use App\Http\Requests\StoreCartridgeRequest;
 
 class CartridgesController extends Controller
 {
@@ -33,17 +35,17 @@ class CartridgesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCartridgeRequest $request)
     {
-        $validated = $request->validate([
-            'model' => 'required|string|max:50',
-            'barcode' => 'string|max:10',
-            'comment'   => 'nullable|string',
-            'working' => 'nullable|integer|min:0',
-            'place_id' => 'required|exists:places,id',
-        ]);
-
-        $cartridge = Cartridge::create($validated);
+        // $validated = $request->validate([
+        //     'model' => 'required|string|max:50',
+        //     'barcode' => 'string|max:10',
+        //     'comment'   => 'nullable|string',
+        //     'working' => 'nullable|integer|min:0',
+        //     'place_id' => 'required|exists:places,id',
+        // ]);
+        // $cartridge->store($request->validated());
+        $cartridge = Cartridge::create($request->validated());
         return new CartridgeResource($cartridge);
     }
 
@@ -52,13 +54,7 @@ class CartridgesController extends Controller
      */
     public function show(string $id)
     {
-        $cartridge = Cartridge::find($id);
-        if(!$cartridge) {
-            return response()->json([
-                "status" => false,
-                "message" => "Cartridge Not Found"
-            ])->setStatusCode(404, "Cartridge Not Found");
-        }
+        $cartridge = Cartridge::findOrFail($id);
         return response()->json([
             "cartridge"   => new CartridgeResource($cartridge)
         ]);
@@ -78,14 +74,6 @@ class CartridgesController extends Controller
     // public function update(Request $request, string $id)
     public function update(UpdateCartridgeRequest $request, Cartridge $cartridge)
     {
-        // $validated = $request->validate([
-        //     'model' => 'required|string|max:50',
-        //     'barcode' => 'string|max:10',
-        //     'comment'   => 'nullable|string',
-        //     'working' => 'nullable|integer|min:0',
-        //     'place_id' => 'required|exists:places,id',
-        // ]);
-        // $cartridge->update($validated);
         $cartridge->update($request->validated());
         return new CartridgeResource($cartridge);
     }
@@ -95,34 +83,13 @@ class CartridgesController extends Controller
      */
     public function destroy(Cartridge $cartridge)
     {
-        // $cartridge = Cartridge::find($id);
-
-        // if(!$cartridge) {
-        //     return response()->json([
-        //         "status" => false,
-        //         "message" => "Cartridge Not Found"
-        //     ])->setStatusCode(404, "Cartridge Not Found");
-        // }
-
-        // $cartridge->delete();
-
-        // return response()->json([
-        //     "status" => true,
-        //     "message" => "Cartridge is deleted"
-        // ])->setStatusCode(200, "Cartridge is deleted");
-
-
         $cartridge->delete();
         return response()->json(null, 204);
     }
 
-    public function search(Request $request)
+    public function search(SearchCartridgeRequest $request)
     {
-        $request->validate([
-            'query' => 'required|string|min:3',
-        ]);
-        $cartridges = Cartridge::where('barcode', 'like', $request->query('query') . '%')->get();
-
+        $cartridges = Cartridge::where('barcode', 'like', $request->validated()['query'] . '%')->with('place')->get();
         return CartridgeResource::collection($cartridges);
     }
 }

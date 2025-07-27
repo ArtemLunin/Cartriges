@@ -11,12 +11,20 @@ class Cartridge extends Model
 
     protected $fillable = ['model', 'barcode', 'comment', 'working', 'place_id'];
 
-    protected $attributes = [
-        'working' => 1,
-    ];
+    protected $attributes = ['working' => 1];
 
     public function place()
     {
         return $this->belongsTo(Place::class);
+    }
+
+    public function model()
+    {
+        return $this->belongsTo(CartridgeModel::class);
+    }
+
+    public function refillings()
+    {
+        return $this->hasMany(Refilling::class);
     }
 }

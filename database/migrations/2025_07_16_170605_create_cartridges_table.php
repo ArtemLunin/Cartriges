@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('cartridges', function (Blueprint $table) {
             $table->id();
-            $table->string('model', 50);
+            // $table->string('model', 50);
             $table->string('barcode', 10)->index()->nullable();
-            // $table->timestamp('created_at')->nullable();
             $table->text('comment')->nullable();
             $table->boolean('working')->default(true);
             $table->timestamps();
 
             $table->foreignId('place_id')->index()->constrained('places');
+            $table->foreignId('model_id')->index()->constrained('cartridge_models');
         });
     }
 
