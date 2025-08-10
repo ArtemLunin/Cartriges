@@ -17,8 +17,7 @@ class PlacesController extends Controller
     {
         $places = Place::all();
         return response()->json([
-            "printers"  => new PlaceCollection($places),
-            // "count" => $places->count()
+            "places"  => new PlaceCollection($places),
         ]);
     }
 

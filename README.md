@@ -8,6 +8,7 @@ sail artisan migrate
 sail artisan make:controller Api/PrintersController --resource
 sail artisan make:controller Api/PlacesController --resource
 sail artisan make:controller Api/CartridgesController --resource
+sail artisan make:controller Api/CartridgeModelsController --resource
 
 sail artisan make:resource Printer
 sail artisan make:resource PrinterCollection
@@ -15,14 +16,24 @@ sail artisan make:resource Place
 sail artisan make:resource PlaceCollection
 sail artisan make:resource Cartridge
 sail artisan make:resource CartridgeCollection# Cartriges
+sail artisan make:resource CartridgeModel
+sail artisan make:resource CartridgeModelCollection
 
-## Вынесим валидацию в Form Request:
+## Вынесем валидацию в Form Request:
 sail artisan make:request StoreCartridgeRequest
 sail artisan make:request UpdateCartridgeRequest
 sail artisan make:request SearchCartridgeRequest
+sail artisan make:request UpdatePrinterRequest
+sail artisan make:request StorePrinterRequest
+sail artisan make:request StoreCartridgeModelRequest
+sail artisan make:request UpdateCartridgeModelRequest
 
 ## Бэкап БД
 sail exec mysql mysqldump -u root -ppassword laravel > backup.sql
 
 ## Изменение структуры таблицы cartridges
 sail artisan make:migration modify_cartridges_table_add_model_id_remove_model
+## Изменение структуры таблицы cartridge_models с указанием таблицы
+sail artisan make:migration modify_cartridge_models_table_add_capacity --table=cartridge_models
+## Изменение структуры таблицы refillings с указанием таблицы
+sail artisan make:migration modify_refillings_add_cost --table=refillings

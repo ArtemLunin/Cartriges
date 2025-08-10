@@ -9,7 +9,7 @@ class Cartridge extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['model', 'barcode', 'comment', 'working', 'place_id'];
+    protected $fillable = ['model_id', 'barcode', 'comment', 'working', 'place_id'];
 
     protected $attributes = ['working' => 1];
 

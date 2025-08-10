@@ -9,7 +9,7 @@ class Refilling extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['model', 'date_dispatch', 'date_receipt', 'completed', 'cartridge_id'];
+    protected $fillable = ['model', 'date_dispatch', 'date_receipt', 'completed', 'cost', 'cartridge_id'];
 
     protected $attributes = ['completed' => 0];
     

@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('cartridge_models', function (Blueprint $table) {
             $table->id();
             $table->string('model', 50)->unique();
+            $table->integer('capacity')->unsigned()->default(700);
+            $table->integer('cost')->unsigned()->default(0)->nullable();
         });
     }
 

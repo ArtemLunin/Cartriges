@@ -16,13 +16,16 @@ class Cartridge extends JsonResource
     {
         return [
             "id"    => $this->id,
-            "model" => $this->model,
             "barcode"   => $this->barcode,
             "comment"   => $this->comment,
             "working"   => $this->working,
             "place" => [
                 "id"    => $this->place->id,
                 "place_name"    => $this->place->place_name
+            ],
+            "model" => [
+                "id"    => $this->cartridge_model->id,
+                "model"    => $this->cartridge_model->model
             ]
         ];
     }

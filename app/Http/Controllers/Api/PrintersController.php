@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Printer;
 use App\Http\Resources\Printer as PrinterResource;
 use App\Http\Resources\PrinterCollection;
+use App\Http\Requests\UpdatePrinterRequest;
+use App\Http\Requests\StorePrinterRequest;
 
 
 class PrintersController extends Controller
@@ -16,12 +18,6 @@ class PrintersController extends Controller
      */
     public function index()
     {
-        // $printers = Printer::all();
-        // return response()->json([
-        //     "printers"  => new PrinterCollection($printers),
-        //     // "count" => $printers->count()
-        // ]);
-
         $printers = Printer::with('place')->get();
         return response()->json([
             "printers"  => new PrinterCollection($printers)
@@ -39,15 +35,15 @@ class PrintersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePrinterRequest $request)
     {
-        $printer = Printer::create([
-            "model" => $request->model,
-            "comment"   => $request->comment,
-            "place_id"  => $request->place_id
-        ]);
+        // $printer = Printer::create([
+        //     "model" => $request->model,
+        //     "comment"   => $request->comment,
+        //     "place_id"  => $request->place_id
+        // ]);
 
-        // return $printer;
+        $printer = Printer::create($request->validated());
         return new PrinterResource($printer);
     }
 
@@ -80,20 +76,24 @@ class PrintersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePrinterRequest $request, Printer $printer)
     {
-        $printer = Printer::find($id);
-        if(!$printer) {
-            return response()->json([
-                "status" => false,
-                "message" => "Printer Not Found"
-            ])->setStatusCode(404, "Printer Not Found");
-        }
+        // $printer = Printer::find($id);
+        // if(!$printer) {
+        //     return response()->json([
+        //         "status" => false,
+        //         "message" => "Printer Not Found"
+        //     ])->setStatusCode(404, "Printer Not Found");
+        // }
 
-        $printer->model = $request->model;
-        $printer->comment = $request->comment;
-        $printer->save();
-        return $printer;
+        // $printer->model = $request->model;
+        // $printer->comment = $request->comment;
+        // $printer->place_id = $request->place_id;
+        // $printer->save();
+        // return $printer;
+
+        $printer->update($request->validated());
+        return new PrinterResource($printer);
 
     }
 

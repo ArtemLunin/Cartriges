@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PrintersController;
 use App\Http\Controllers\Api\PlacesController;
 use App\Http\Controllers\Api\CartridgesController;
+use App\Http\Controllers\Api\CartridgeModelsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,4 @@ Route::get('cartridges/search', [CartridgesController::class, 'search'])->name('
 Route::apiResource('printers', PrintersController::class);
 Route::apiResource('places', PlacesController::class);
 Route::apiResource('cartridges', CartridgesController::class);
+Route::apiResource('cartridge-models', CartridgeModelsController::class);

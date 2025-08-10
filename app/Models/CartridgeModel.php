@@ -9,7 +9,9 @@ class CartridgeModel extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['model'];
+    protected $fillable = ['model', 'capacity', 'cost'];
+
+    protected $attributes = ['capacity' => 700, 'cost' => 0];
 
     public $timestamps = false;
 
