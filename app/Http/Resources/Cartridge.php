@@ -24,8 +24,8 @@ class Cartridge extends JsonResource
                 "place_name"    => $this->place->place_name
             ],
             "model" => [
-                "id"    => $this->cartridge_model->id,
-                "model"    => $this->cartridge_model->model
+                "id"    => $this->model->id,
+                "model"    => $this->model->model
             ]
         ];
     }

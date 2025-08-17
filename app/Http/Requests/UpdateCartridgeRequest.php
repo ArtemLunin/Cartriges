@@ -22,11 +22,19 @@ class UpdateCartridgeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'model' => 'required|string|max:50',
-            'barcode' => 'string|max:10',
+            'barcode' => 'string|max:10|unique:cartridges,barcode,' . $this->route('cartridge')->id,
             'comment'   => 'nullable|string',
             'working' => 'nullable|integer|min:0',
             'place_id' => 'required|exists:places,id',
+            'model_id' => 'required|exists:cartridge_models,id'
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'place_id' => $this->input('place_id', $this->route('cartridge')->place_id),
+            'model_id' => $this->input('model_id', $this->route('cartridge')->model_id),
+        ]);
     }
 }

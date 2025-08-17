@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('cartridges', function (Blueprint $table) {
             $table->id();
-            // $table->string('model', 50);
             $table->string('barcode', 10)->index()->nullable();
             $table->text('comment')->nullable();
             $table->boolean('working')->default(true);

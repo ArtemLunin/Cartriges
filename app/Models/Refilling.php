@@ -9,9 +9,15 @@ class Refilling extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['model', 'date_dispatch', 'date_receipt', 'completed', 'cost', 'cartridge_id'];
+    protected $fillable = ['date_dispatch', 'date_receipt', 'completed', 'cartridge_id'];
 
     protected $attributes = ['completed' => 0];
+
+    protected $casts = [
+        'completed' => 'boolean',
+        'date_dispatch' => 'datetime',
+        'date_receipt' => 'datetime',
+    ];
     
     public $timestamps = false;
 

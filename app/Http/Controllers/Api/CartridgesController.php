@@ -37,14 +37,6 @@ class CartridgesController extends Controller
      */
     public function store(StoreCartridgeRequest $request)
     {
-        // $validated = $request->validate([
-        //     'model' => 'required|string|max:50',
-        //     'barcode' => 'string|max:10',
-        //     'comment'   => 'nullable|string',
-        //     'working' => 'nullable|integer|min:0',
-        //     'place_id' => 'required|exists:places,id',
-        // ]);
-        // $cartridge->store($request->validated());
         $cartridge = Cartridge::create($request->validated());
         return new CartridgeResource($cartridge);
     }

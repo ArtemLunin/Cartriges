@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\PrintersController;
 use App\Http\Controllers\Api\PlacesController;
 use App\Http\Controllers\Api\CartridgesController;
 use App\Http\Controllers\Api\CartridgeModelsController;
+use App\Http\Controllers\Api\RefillingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,4 @@ Route::apiResource('printers', PrintersController::class);
 Route::apiResource('places', PlacesController::class);
 Route::apiResource('cartridges', CartridgesController::class);
 Route::apiResource('cartridge-models', CartridgeModelsController::class);
+Route::apiResource('refillings', RefillingsController::class);

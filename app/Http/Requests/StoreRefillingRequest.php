@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCartridgeRequest extends FormRequest
+class StoreRefillingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,10 @@ class StoreCartridgeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'barcode' => 'string|max:10|unique:cartridges,barcode',
-            'comment'   => 'nullable|string',
-            'working' => 'nullable|integer|min:0',
-            'place_id' => 'required|exists:places,id',
-            'model_id' => 'required|exists:cartridge_models,id',
+            'date_dispatch' => 'required|date|date_format:Y-m-d',
+            'date_receipt'  => 'nullable|date|date_format:Y-m-d',
+            'completed' => 'nullable|boolean',
+            'cartridge_id' => 'required|exists:cartridges,id',
         ];
     }
 }
