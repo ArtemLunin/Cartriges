@@ -9,6 +9,7 @@ sail artisan make:controller Api/PrintersController --resource
 sail artisan make:controller Api/PlacesController --resource
 sail artisan make:controller Api/CartridgesController --resource
 sail artisan make:controller Api/CartridgeModelsController --resource
+sail artisan make:controller Api/RefillingsController --resource
 
 sail artisan make:resource Printer
 sail artisan make:resource PrinterCollection
@@ -18,6 +19,8 @@ sail artisan make:resource Cartridge
 sail artisan make:resource CartridgeCollection# Cartriges
 sail artisan make:resource CartridgeModel
 sail artisan make:resource CartridgeModelCollection
+sail artisan make:resource RefillingModel
+sail artisan make:resource RefillingModelCollection
 
 ## Вынесем валидацию в Form Request:
 sail artisan make:request StoreCartridgeRequest
@@ -27,6 +30,8 @@ sail artisan make:request UpdatePrinterRequest
 sail artisan make:request StorePrinterRequest
 sail artisan make:request StoreCartridgeModelRequest
 sail artisan make:request UpdateCartridgeModelRequest
+sail artisan make:request StoreRefillingRequest
+sail artisan make:request IndexRefillingRequest
 
 ## Бэкап БД
 sail exec mysql mysqldump -u root -ppassword laravel > backup.sql
