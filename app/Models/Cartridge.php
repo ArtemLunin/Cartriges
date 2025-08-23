@@ -15,12 +15,12 @@ class Cartridge extends Model
 
     public function place()
     {
-        return $this->belongsTo(Place::class);
+        return $this->belongsTo(Place::class, 'place_id', 'id');
     }
 
     public function model()
     {
-        return $this->belongsTo(CartridgeModel::class);
+        return $this->belongsTo(CartridgeModel::class, 'model_id', 'id');
     }
 
     public function refillings()

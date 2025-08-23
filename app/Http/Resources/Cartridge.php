@@ -14,19 +14,26 @@ class Cartridge extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             "id"    => $this->id,
             "barcode"   => $this->barcode,
             "comment"   => $this->comment,
             "working"   => $this->working,
-            "place" => [
+        ];
+        if (!str_contains($request->path(), 'cartridge-models')) {
+            $data['model'] = $this->whenLoaded('model', fn() => [
+            // $data['model'] = [
+                'id' => $this->model->id,
+                'model' => $this->model->model,
+            ],1);
+        }
+        if (!str_contains($request->path(), 'places')) {
+            $data['place'] = $this->whenLoaded('place', fn() => [
+                // $data['place'] = [
                 "id"    => $this->place->id,
                 "place_name"    => $this->place->place_name
-            ],
-            "model" => [
-                "id"    => $this->model->id,
-                "model"    => $this->model->model
-            ]
-        ];
+            ]);
+        }
+        return $data;
     }
 }

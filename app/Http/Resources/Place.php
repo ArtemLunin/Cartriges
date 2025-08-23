@@ -17,7 +17,8 @@ class Place extends JsonResource
         return [
             "id"    => $this->id,
             "place_name" => $this->place_name,
-            "comment"   => $this->comment
+            "comment"   => $this->comment,
+            'cartridges' => Cartridge::collection($this->cartridges)
         ];
     }
 }

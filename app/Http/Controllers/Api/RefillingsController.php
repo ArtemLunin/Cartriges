@@ -20,15 +20,12 @@ class RefillingsController extends Controller
      */
     public function index(IndexRefillingRequest $request)
     {
-
-        // dd($request->input('month'));
         if ($request->filled('month') && $request->filled('year')) {
             $query = Refilling::with('cartridge');//::query();
             $date_obj = Carbon::create($request->input('year'), $request->input('month'));
             $date_start = $date_obj->setDay(1)->startOfDay()->toDateTimeString();
             $date_end = $date_obj->endOfMonth()->endOfDay()->toDateTimeString();
             $query->whereDate('date_dispatch', '>=', $date_start);
-            // $query->whereDate('date_receipt', '<=', $date_end);
             $query->where(function ($query) use ($date_end) {
                 $query->whereDate('date_receipt', '<=', $date_end)
                       ->orWhereNull('date_receipt');

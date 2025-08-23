@@ -14,11 +14,13 @@ class CartridgeModel extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // dd($this->cartridges);
         return [
             "id"    => $this->id,
             "model" => $this->model,
             "capacity"   => $this->capacity,
-            "cost"  => $this->cost
+            "cost"  => $this->cost,
+            "cartridges" => Cartridge::collection($this->cartridges)
         ];
     }
 }

@@ -18,9 +18,9 @@ class CartridgesController extends Controller
      */
     public function index()
     {
-        $cartridges = Cartridge::with('place')->get();
+        $cartridges = Cartridge::with(['model', 'place'])->get();
         return response()->json([
-            "cartridges"  => new CartridgeCollection($cartridges)
+            'cartridges'  => new CartridgeCollection($cartridges)
         ]);
     }
 

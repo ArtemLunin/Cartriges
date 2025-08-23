@@ -17,6 +17,6 @@ class CartridgeModel extends Model
 
     public function cartridges()
     {
-        return $this->hasMany(Cartridge::class);
+        return $this->hasMany(Cartridge::class, 'model_id', 'id');
     }
 }

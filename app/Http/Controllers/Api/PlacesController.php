@@ -16,6 +16,7 @@ class PlacesController extends Controller
     public function index()
     {
         $places = Place::all();
+        $places->load('cartridges');
         return response()->json([
             "places"  => new PlaceCollection($places),
         ]);
@@ -54,6 +55,7 @@ class PlacesController extends Controller
                 "message" => "Place Not Found"
             ])->setStatusCode(404, "Place Not Found");
         }
+        $place->load('cartridges');
         return response()->json([
             "place"   => new PlaceResource($place)
         ]);
@@ -80,6 +82,7 @@ class PlacesController extends Controller
             ])->setStatusCode(404, "Place Not Found");
         }
 
+        $place->load('cartridges');
         $place->place_name = $request->place_name;
         $place->comment = $request->comment;
         $place->save();

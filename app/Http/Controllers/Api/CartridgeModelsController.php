@@ -18,6 +18,7 @@ class CartridgeModelsController extends Controller
     public function index()
     {
         $cartridgeModels = CartridgeModel::all();
+        $cartridgeModels->load(['cartridges', 'cartridges.place']);
         return response()->json([
             "cartridgeModels"  => new CartridgeModelCollection($cartridgeModels)
         ]);
@@ -45,6 +46,7 @@ class CartridgeModelsController extends Controller
      */
     public function show(CartridgeModel $cartridgeModel)
     {
+        $cartridgeModel->load('cartridges');
         return response()->json([
             "cartridge"   => new CartridgeModelResource($cartridgeModel)
         ]);
@@ -63,6 +65,7 @@ class CartridgeModelsController extends Controller
      */
     public function update(UpdateCartridgeModelRequest $request, CartridgeModel $cartridgeModel)
     {
+        $cartridgeModel->load('cartridges');
         $cartridgeModel->update($request->validated());
         return new CartridgeModelResource($cartridgeModel);
     }
