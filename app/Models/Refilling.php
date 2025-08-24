@@ -23,6 +23,6 @@ class Refilling extends Model
 
     public function cartridge()
     {
-        return $this->belongsTo(Cartridge::class);
+        return $this->belongsTo(Cartridge::class, 'cartridge_id', 'id');
     }
 }

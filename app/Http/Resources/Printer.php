@@ -14,16 +14,12 @@ class Printer extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // return parent::toArray($request);
-        // dd($this);
         return [
             "id"    => $this->id,
             "model" => $this->model,
             "comment"   => $this->comment,
-            "place" => [
-                "id"    => $this->place->id,
-                "place_name"    => $this->place->place_name
-            ]
+            "place_id" => $this->place->id,
+            "place_name" => $this->place->place_name,
         ];
     }
 }

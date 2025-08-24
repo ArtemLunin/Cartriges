@@ -11,6 +11,7 @@ use App\Http\Resources\RefillingCollection;
 use App\Http\Requests\StoreRefillingRequest;
 use App\Http\Requests\UpdateRefillingRequest;
 use App\Http\Requests\IndexRefillingRequest;
+use Illuminate\Validation\ValidationException;
 
 
 class RefillingsController extends Controller
@@ -21,21 +22,21 @@ class RefillingsController extends Controller
     public function index(IndexRefillingRequest $request)
     {
         if ($request->filled('month') && $request->filled('year')) {
-            $query = Refilling::with('cartridge');//::query();
+            $query = Refilling::with(['cartridge', 'cartridge.model']);//::query();
             $date_obj = Carbon::create($request->input('year'), $request->input('month'));
             $date_start = $date_obj->setDay(1)->startOfDay()->toDateTimeString();
             $date_end = $date_obj->endOfMonth()->endOfDay()->toDateTimeString();
             $query->whereDate('date_dispatch', '>=', $date_start);
             $query->where(function ($query) use ($date_end) {
-                $query->whereDate('date_receipt', '<=', $date_end)
-                      ->orWhereNull('date_receipt');
+                $query->whereDate('date_dispatch', '<=', $date_end);
+                    //   ->orWhereNull('date_dispatch');
             });
             $refillings = $query->get();
             return response()->json([
                 "refillings"  => new RefillingCollection($refillings)
            ]);
         } else {
-            $refillings = Refilling::with('cartridge')->get();
+            $refillings = Refilling::with(['cartridge', 'cartridge.model'])->get();
             return response()->json([
                 "refillings"  => new RefillingCollection($refillings)
             ]);
@@ -55,16 +56,21 @@ class RefillingsController extends Controller
      */
     public function store(StoreRefillingRequest $request)
     {
-        $refilling = Refilling::create($request->validated());
+        $validated = $request->validated();
+        $this->checkConsistency($validated);
+        $refilling = Refilling::create($validated);
         return new RefillingResource($refilling);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Refilling $refilling)
     {
-        //
+        $refilling->load(['cartridge', 'cartridge.model']);
+        return response()->json([
+            "refilling"  => new RefillingResource($refilling)
+        ]);
     }
 
     /**
@@ -80,15 +86,38 @@ class RefillingsController extends Controller
      */
     public function update(UpdateRefillingRequest $request, Refilling $refilling)
     {
-        $refilling->update($request->validated());
+        $validated = $request->validated();
+        // $this->checkConsistency($refilling, $validated);
+        $refilling->update($validated);
         return new RefillingResource($refilling);
+    }
+
+    protected function checkConsistency(array $validated): void
+    {
+        if (isset($validated['date_dispatch'])) {
+            $latest_date_dispatch = Refilling::where('cartridge_id', $validated['cartridge_id'])
+                ->orderBy('date_dispatch', 'desc')
+                ->first();
+
+            if ($latest_date_dispatch && $latest_date_dispatch->date_dispatch >= $validated['date_dispatch']) {
+                throw ValidationException::withMessages([
+                    'date_dispatch' => 'The date_dispatch date cannot be earlier than the latest date_dispatch date (' . $latest_date_dispatch->date_dispatch . ').',
+                ]);
+            }
+        }
+
+        // \Log::info('Consistency check passed for Refilling', [
+        //     'refilling_id' => $validated['cartridge_id'],
+        //     'validated' => $validated,
+        // ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Refilling $refilling)
     {
-        //
+        $refilling->delete();
+        return response()->json(null, 204);
     }
 }

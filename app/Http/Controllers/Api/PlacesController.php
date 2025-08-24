@@ -16,7 +16,7 @@ class PlacesController extends Controller
     public function index()
     {
         $places = Place::all();
-        $places->load('cartridges');
+        $places->load(['cartridges', 'cartridges.model']);
         return response()->json([
             "places"  => new PlaceCollection($places),
         ]);
@@ -46,16 +46,17 @@ class PlacesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Place $place)
     {
-        $place = Place::find($id);
-        if(!$place) {
-            return response()->json([
-                "status" => false,
-                "message" => "Place Not Found"
-            ])->setStatusCode(404, "Place Not Found");
-        }
-        $place->load('cartridges');
+        $place->load(['cartridges', 'cartridges.model']);
+        // $place = Place::find($id);
+        // if(!$place) {
+        //     return response()->json([
+        //         "status" => false,
+        //         "message" => "Place Not Found"
+        //     ])->setStatusCode(404, "Place Not Found");
+        // }
+        // $place->load('cartridges');
         return response()->json([
             "place"   => new PlaceResource($place)
         ]);

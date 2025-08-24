@@ -15,10 +15,10 @@ class Place extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id"    => $this->id,
+            "id"        => $this->id,
             "place_name" => $this->place_name,
             "comment"   => $this->comment,
-            'cartridges' => Cartridge::collection($this->cartridges)
+            "cartridges" => Cartridge::collection($this->cartridges)
         ];
     }
 }

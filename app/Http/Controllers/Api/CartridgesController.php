@@ -18,7 +18,7 @@ class CartridgesController extends Controller
      */
     public function index()
     {
-        $cartridges = Cartridge::with(['model', 'place'])->get();
+        $cartridges = Cartridge::with(['model', 'place', 'refillings', 'refillings.cartridge'])->get();
         return response()->json([
             'cartridges'  => new CartridgeCollection($cartridges)
         ]);
@@ -44,9 +44,9 @@ class CartridgesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Cartridge $cartridge)
     {
-        $cartridge = Cartridge::findOrFail($id);
+        $cartridge->load(['model', 'place', 'refillings', 'refillings.cartridge']);
         return response()->json([
             "cartridge"   => new CartridgeResource($cartridge)
         ]);
@@ -81,7 +81,7 @@ class CartridgesController extends Controller
 
     public function search(SearchCartridgeRequest $request)
     {
-        $cartridges = Cartridge::where('barcode', 'like', $request->validated()['query'] . '%')->with('place')->get();
+        $cartridges = Cartridge::where('barcode', 'like', $request->validated()['query'] . '%')->with(['model', 'place', 'refillings', 'refillings.cartridge'])->get();
         return CartridgeResource::collection($cartridges);
     }
 }

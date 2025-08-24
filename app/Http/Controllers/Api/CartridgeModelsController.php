@@ -46,7 +46,7 @@ class CartridgeModelsController extends Controller
      */
     public function show(CartridgeModel $cartridgeModel)
     {
-        $cartridgeModel->load('cartridges');
+        $cartridgeModel->load(['cartridges', 'cartridges.place']);
         return response()->json([
             "cartridge"   => new CartridgeModelResource($cartridgeModel)
         ]);

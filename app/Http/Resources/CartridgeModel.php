@@ -14,7 +14,6 @@ class CartridgeModel extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // dd($this->cartridges);
         return [
             "id"    => $this->id,
             "model" => $this->model,
