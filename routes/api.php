@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PlacesController;
 use App\Http\Controllers\Api\CartridgesController;
 use App\Http\Controllers\Api\CartridgeModelsController;
 use App\Http\Controllers\Api\RefillingsController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +23,16 @@ use App\Http\Controllers\Api\RefillingsController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::get('cartridges/search', [CartridgesController::class, 'search'])->name('cartridges.search');
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('refresh', [AuthController::class, 'refresh']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
 
-Route::apiResource('printers', PrintersController::class);
-Route::apiResource('places', PlacesController::class);
-Route::apiResource('cartridges', CartridgesController::class);
-Route::apiResource('cartridge-models', CartridgeModelsController::class);
-Route::apiResource('refillings', RefillingsController::class);
+Route::middleware('auth:api')->group(function () {
+    Route::get('cartridges/search', [CartridgesController::class, 'search'])->name('cartridges.search');
+    Route::apiResource('printers', PrintersController::class);
+    Route::apiResource('places', PlacesController::class);
+    Route::apiResource('cartridges', CartridgesController::class);
+    Route::apiResource('cartridge-models', CartridgeModelsController::class);
+    Route::apiResource('refillings', RefillingsController::class);
+});

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Place;
 use App\Http\Resources\Place as PlaceResource;
 use App\Http\Resources\PlaceCollection;
+use App\Http\Requests\StorePlaceRequest;
+use App\Http\Requests\UpdatePlaceRequest;
 
 class PlacesController extends Controller
 {
@@ -33,7 +35,7 @@ class PlacesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePlaceRequest $request)
     {
         $place = Place::create([
             "place_name" => $request->place_name,
@@ -73,7 +75,7 @@ class PlacesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePlaceRequest $request, string $id)
     {
         $place = Place::find($id);
         if(!$place) {

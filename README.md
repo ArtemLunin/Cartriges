@@ -22,6 +22,17 @@ sail artisan make:resource CartridgeModelCollection
 sail artisan make:resource RefillingModel
 sail artisan make:resource RefillingModelCollection
 
+## Add JWT to project
+sail composer require tymon/jwt-auth
+sail artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+sail artisan jwt:secret
+sail artisan make:migration create_users_table
+sail artisan make:migration add_refresh_token_to_users
+sail artisan make:model User
+sail artisan make:controller Api/AuthController
+sail artisan make:request RegisterRequest
+sail artisan make:request LoginRequest
+
 ## Вынесем валидацию в Form Request:
 sail artisan make:request StoreCartridgeRequest
 sail artisan make:request UpdateCartridgeRequest
@@ -32,6 +43,8 @@ sail artisan make:request StoreCartridgeModelRequest
 sail artisan make:request UpdateCartridgeModelRequest
 sail artisan make:request StoreRefillingRequest
 sail artisan make:request IndexRefillingRequest
+sail artisan make:request StorePlaceRequest
+sail artisan make:request UpdatePlaceRequest
 
 ## Бэкап БД
 sail exec mysql mysqldump -u root -ppassword laravel > backup.sql
